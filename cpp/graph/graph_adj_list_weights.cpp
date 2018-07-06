@@ -4,8 +4,11 @@
 #include <vector>
 #include <algorithm>
 #include <cassert>
+#include <queue>
 
 using namespace std;
+
+typedef pair<int, int> intPair;
 
 class Graph {
     /* directed, weighted graph */
@@ -26,6 +29,7 @@ class Graph {
     void DFS(int s);
     void display();
     vector <int> dijkstra(int s);
+    vector <int> dijkstra_minheap(int s);
 };
 
 void Graph::display() {
@@ -91,16 +95,17 @@ void Graph::BFS(int s) {
 
 /* Implement pseudo code for:
 http://cs.indstate.edu/hgopireddy/pseudo1.pdf
- */
-/* returns the min path weight from s to all other vertices in the graph */
+== corrected version of algo
+returns the min path weight from s to all other vertices in the graph */
 vector <int> Graph::dijkstra(int s) {
     list<int> queue;
-    set<int> unvisited;
+    set<int> visited;
     vector<int> dist(V+1, INT_MAX);
 
     dist[s] = 0;
-    for (auto i = 1; i <= V; i++)
-        queue.push_back(i);
+    queue.push_back(s);
+    //for (auto i = 1; i <= V; i++)
+    //    queue.push_back(i);
 
     while (!queue.empty()) {
         int min_val = INT_MAX;
@@ -115,16 +120,63 @@ vector <int> Graph::dijkstra(int s) {
             }
         }
 
-        assert(u != -1);
+        if (u == -1)
+            break; //No such element found
         queue.remove(u);
-        unvisited.insert(u);
+        visited.insert(u);
+
         for (auto i = adj[u].begin(); i != adj[u].end(); i++) {
-            if (dist[i->first] > dist[u] + i->second) {
-                dist[i->first] = dist[u] + i->second;
+            auto v = i->first;
+            //v is already visited continue
+            if (visited.find(v) != visited.end())
+                continue;
+            auto better_path = dist[u] + i->second;
+            if (dist[v] > better_path) {
+                dist[v] = better_path;
+                queue.push_back(v);
             }
         }
     }
 
+    dist.erase (dist.begin()); // one-based array - remove 0th element
+    return dist;
+}
+
+/* using stl min_heap */
+vector <int> Graph::dijkstra_minheap(int s)
+{
+    priority_queue< intPair, vector <intPair> , greater<intPair> > pq;
+ 
+    vector<int> dist(V+1, INT_MAX);
+ 
+    pq.push(make_pair(0, s));
+    dist[s] = 0;
+ 
+    /* Looping till priority queue becomes empty (or all
+      distances are not finalized) */
+    while (!pq.empty())
+    {
+        int u = pq.top().second;
+        pq.pop();
+ 
+        // 'i' is used to get all adjacent vertices of a vertex
+        for (auto i = adj[u].begin(); i != adj[u].end(); ++i)
+        {
+            // Get vertex label and weight of current adjacent
+            // of u.
+            int v = i->first;
+            int weight = i->second;
+ 
+            //  If there is shorted path to v through u.
+            if (dist[v] > dist[u] + weight)
+            {
+                // Updating distance of v
+                dist[v] = dist[u] + weight;
+                pq.push(make_pair(dist[v], v));
+            }
+        }
+    }
+ 
     dist.erase (dist.begin()); // one-based array - remove 0th element
     return dist;
 }
@@ -159,10 +211,19 @@ int main() {
     auto ret = g.dijkstra(3);
     DUMP_VECTOR(ret);
 
+    /*
+    */
+    cout << "dijkstra_minheap of " << 3 << endl;
+    ret = g.dijkstra_minheap(3);
+    DUMP_VECTOR(ret);
+
     cout << "dijkstra of " << 1 << endl;
     ret = g.dijkstra(1);
     DUMP_VECTOR(ret);
 
+    cout << "dijkstra_minheap of " << 1 << endl;
+    ret = g.dijkstra_minheap(1);
+    DUMP_VECTOR(ret);
     return 0;
 }
 
