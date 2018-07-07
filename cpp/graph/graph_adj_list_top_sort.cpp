@@ -15,7 +15,7 @@ class Graph {
     int findElem(list <int>l);
     bool DFSCustom(int s, vector<int> &marker, list<int> &order);
 
-  public:
+    public:
     Graph(int V);
     void addEdge(int v, int w);
     void DFS(int s);
@@ -39,7 +39,7 @@ void Graph::DFSUtil(int s, bool visited[])
 {
     visited[s] = true;
     cout << s << " ";
-    
+
     list<int>::iterator i;
 
     for (i = adj[s].begin(); i != adj[s].end(); i++) {
@@ -162,8 +162,8 @@ bool Graph::isCycle() {
 
 #define DUMP_LIST(_vect)    \
     for (auto num : _vect)  \
-        cout << num << " "; \
-    cout << endl;
+cout << num << " "; \
+cout << endl;
 
 int main() {
     Graph g(5);
@@ -185,7 +185,7 @@ int main() {
     cout << "dfsTopSort" << endl;
     lst = g.dfsTopSort();
     DUMP_LIST(lst);
-    
+
     cout << "isCycle: " << g.isCycle() << endl;
     return 0;
 }
