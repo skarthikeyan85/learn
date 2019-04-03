@@ -1,3 +1,4 @@
+# learn
 Max in a vector:
 
 1. double max = *max_element(vector.begin(), vector.end());
