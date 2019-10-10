@@ -1,11 +1,3 @@
-# karthik
-# and u are ?
-'''
-Oleg
-arr = [-8,0,2,5]
-.,.,.,2
-'''
-
 def index_equals_value_search(arr):
   # for every element: 
   #   check if index == value
