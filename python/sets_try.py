@@ -21,6 +21,10 @@ print("\n")
 print("Set2 = ", 3 in set2)
 print("Set2 = ", 8 in set2)
 
+set2.remove(3)
+print("Set2 = ", 3 in set2)
+
+
 sys.exit(0)
 
 # Union of set1 and set2
