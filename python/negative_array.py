@@ -3,14 +3,14 @@
 def neg_count(a):
     sum = 0
     n = len(a)
-    i = 0
-    j = n - 1
-    while (j >= 0 and i < n):
-        if a[i][j] < 0:
-            sum += j + 1
-            i += 1
+    row_idx = 0
+    col_idx = n - 1
+    while (col_idx >= 0 and row_idx < n):
+        if a[row_idx][col_idx] < 0:
+            sum += col_idx + 1
+            row_idx += 1
         else:
-            j -= 1
+            col_idx -= 1
     return sum
 
 def main():
